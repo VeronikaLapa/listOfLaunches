@@ -4,10 +4,8 @@ class Launch extends React.Component {
     constructor(props) {
         super(props);
         this.date = {date: null, isFull: false};
-        if (props.launch.years !== null ) {
-            this.date.date = new Date(props.launch.years, props.launch.months - 1, props.launch.date, props.launch.hours, props.launch.minutes);
-        }
         if (props.launch.years !== null && props.launch.months !== null && props.launch.date !== null && props.launch.hours !== null && props.launch.minutes !== null) {
+            this.date.date = new Date(props.launch.years, props.launch.months - 1, props.launch.date, props.launch.hours, props.launch.minutes);
             this.date.isFull = true;
         }
         this.state = {
@@ -45,33 +43,50 @@ class Launch extends React.Component {
     }
 
     _formatDate(date) {
+        function formatTwoDigitNumber(number) {
+            return number !== null ? ('0' + number).slice(-2) : null
+        }
+
         return `${
             date.years}${
-            date.months !== null ? `/${this._formatTwoDigitNumber(date.months)}`: ''}${
-            date.date !== null ? `/${this._formatTwoDigitNumber(date.date)}`: ''}${
-            date.hours !== null ? ` ${this._formatTwoDigitNumber(date.hours)}`: ''}${
-            date.minutes !== null ? `:${this._formatTwoDigitNumber(date.minutes)}`: ''}`;
+            date.months !== null ? `/${formatTwoDigitNumber(date.months)}` : ''}${
+            date.date !== null ? `/${formatTwoDigitNumber(date.date)}` : ''}${
+            date.hours !== null ? ` ${formatTwoDigitNumber(date.hours)}` : ''}${
+            date.minutes !== null ? `:${formatTwoDigitNumber(date.minutes)}` : ''}`;
     }
-    _formatTwoDigitNumber(number) {
-        return number !== null ? ('0' + number).slice(-2) : null
+
+    static _numToString(n, text_forms) {
+        n = Math.abs(n) % 100;
+        let n1 = n % 10;
+        if (n > 10 && n < 20) {
+            return n.toString() + ' ' + text_forms[2];
+        }
+        if (n1 > 1 && n1 < 5) {
+            return n.toString() + ' ' + text_forms[1];
+        }
+        if (n1 === 1) {
+            return n.toString() + ' ' + text_forms[0];
+        }
+        return n.toString() + ' ' + text_forms[2];
     }
+
     render() {
         const {mission, vehicle, location} = this.props;
-        let timer = <td>Точное время не задано</td>;
+        let timer = 'Точное время не задано';
         const formattedDate = this._formatDate(this.props.launch);
         if (this.date.isFull) {
             const {days, hours, minutes, seconds, isLaunched} = this._formatDateDifference();
-            timer = <td>
-                {isLaunched? 'Прошло ' : 'Осталось'} {this._formatTwoDigitNumber(days)} дней, {this._formatTwoDigitNumber(hours)} часов, {this._formatTwoDigitNumber(minutes)} минут, {this._formatTwoDigitNumber(seconds)} секунд
-            </td>
-
+            timer = (isLaunched ? 'Прошло ' : 'Осталось ') +
+                Launch._numToString(days, ['день', 'дня', 'дней']) + ', '+
+                Launch._numToString(hours, ['час', 'часа', 'часов']) +', '+
+                Launch._numToString(minutes, ['минута', 'минуты', 'минут']);
         }
         return (<tr>
             <td>{mission}</td>
             <td>{vehicle}</td>
             <td>{location}</td>
             <td>{formattedDate}</td>
-            {timer}
+            <td>{timer}</td>
         </tr>);
     }
 }

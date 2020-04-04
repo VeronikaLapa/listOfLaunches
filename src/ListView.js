@@ -9,7 +9,7 @@ class ListView extends React.Component {
             <Launch key={launch.mission} mission={launch.mission} vehicle={launch.vehicle} location={launch.location} launch={launch.launch}/>
         ));
         return (<table className='table'>
-            <caption>Время пуска шатлов SpaceX</caption>
+            <caption>Время запуска шатлов SpaceX</caption>
             <thead>
             <tr>
                 <th>Миссия</th>

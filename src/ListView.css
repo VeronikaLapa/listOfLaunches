@@ -1,20 +1,25 @@
 .table {
     border-collapse: collapse;
-    margin: auto;
+    margin: 10px auto;
 }
-td, th {
+.table td, th {
     border: 1px solid #ddd;
     padding: 8px;
 }
 
-th {
-    padding-top: 12px;
-    padding-bottom: 12px;
+.table th {
+    padding: 12px 8px;
     text-align: left;
     background-color: #63af94;
     color: white;
 }
 
-tr:nth-child(even) {
+.table tr:nth-child(even) {
     background-color: #f2f2f2;
+}
+.table caption {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #444444;
 }
